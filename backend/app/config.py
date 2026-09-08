@@ -32,7 +32,7 @@ class Settings:
         ALLOWED_ORIGINS = [
             "http://localhost:8000",
             "http://localhost:5500",
-            "https://yourusername.github.io"  # ← CHANGE THIS
+            "https://penbeam.github.io"
         ]
     
     # Security
