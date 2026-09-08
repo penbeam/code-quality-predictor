@@ -1,0 +1,15 @@
+# ============================================
+# requirements.txt - Complete Dependencies
+# ============================================
+
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+pydantic==2.5.0
+python-dotenv==1.0.0
+pandas==2.2.0
+numpy==1.26.4
+scikit-learn==1.6.1
+joblib==1.3.2
+python-multipart==0.0.6
+typing-extensions==4.8.0

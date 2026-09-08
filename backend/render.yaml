@@ -1,0 +1,17 @@
+# ============================================
+# render.yaml - Render Deployment Configuration
+# ============================================
+
+services:
+  - type: web
+    name: code-quality-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        value: sqlite:///./code_quality.db
+      - key: ALLOWED_ORIGINS
+        value: https://yourusername.github.io,https://yourusername.github.io

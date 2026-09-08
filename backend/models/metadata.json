@@ -1,0 +1,30 @@
+{
+  "models_trained": [
+    "quality",
+    "bug",
+    "complexity",
+    "maintainability"
+  ],
+  "training_date": "2026-09-08T04:25:22.814229",
+  "feature_count": 12,
+  "r2_scores": {
+    "quality": 0.8891025639482876,
+    "bug": 0.8877025310860732,
+    "complexity": 0.9016296321883488,
+    "maintainability": 0.8957595116169464
+  },
+  "feature_columns": [
+    "line_count",
+    "char_count",
+    "word_count",
+    "keyword_count",
+    "function_count",
+    "class_count",
+    "loop_count",
+    "condition_count",
+    "comment_count",
+    "nested_depth",
+    "avg_line_length",
+    "complexity_heuristic"
+  ]
+}
