@@ -109,19 +109,25 @@
                             <span class="editor-language">Python</span>
                             <span class="editor-line-count" id="lineCount">0 lines</span>
                         </div>
-                        <textarea 
-                            id="codeInput" 
-                            class="code-editor" 
-                            placeholder="# Paste your Python code here..."
-                            spellcheck="false"
-                            rows="12"
-                        >def calculate_average(numbers):
+                        <div class="code-editor-wrapper">
+                        <div class="code-editor-header">
+                        <div class="editor-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                      </div>
+                            <span class="editor-language">Python</span>
+                            <span class="editor-line-count" id="lineCount">0 lines</span>
+                     </div>
+    <pre class="line-numbers"><code id="codeDisplay" class="language-python" contenteditable="true" spellcheck="false"># Paste your Python code here...
+def calculate_average(numbers):
     """Calculate the average of a list of numbers."""
     if not numbers:
         return 0
     total = sum(numbers)
     count = len(numbers)
-    return total / count</textarea>
+    return total / count</code></pre>
+</div>
                     </div>
 
                     <div class="input-actions">
