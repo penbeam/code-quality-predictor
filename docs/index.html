@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="./css/styles.css?v=1.0">
+    <link rel="stylesheet" href="./css/styles.css?v=1.1">
 
     <!-- Prism.js for Syntax Highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
@@ -99,6 +99,7 @@
                         <span class="section-subtitle">Paste your Python code below</span>
                     </div>
 
+                    <!-- ===== CODE EDITOR - CLEAN VERSION ===== -->
                     <div class="code-editor-wrapper">
                         <div class="code-editor-header">
                             <div class="editor-dots">
@@ -109,17 +110,8 @@
                             <span class="editor-language">Python</span>
                             <span class="editor-line-count" id="lineCount">0 lines</span>
                         </div>
-                        <div class="code-editor-wrapper">
-                        <div class="code-editor-header">
-                        <div class="editor-dots">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                      </div>
-                            <span class="editor-language">Python</span>
-                            <span class="editor-line-count" id="lineCount">0 lines</span>
-                     </div>
-    <pre class="line-numbers"><code id="codeDisplay" class="language-python" contenteditable="true" spellcheck="false"># Paste your Python code here...
+                        <div class="code-editor-body">
+                            <pre class="line-numbers"><code id="codeDisplay" class="language-python" contenteditable="true" spellcheck="false"># Paste your Python code here...
 def calculate_average(numbers):
     """Calculate the average of a list of numbers."""
     if not numbers:
@@ -127,7 +119,7 @@ def calculate_average(numbers):
     total = sum(numbers)
     count = len(numbers)
     return total / count</code></pre>
-</div>
+                        </div>
                     </div>
 
                     <div class="input-actions">
@@ -335,6 +327,9 @@ def calculate_average(numbers):
     <!-- ============================================ -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- ============================================ -->
+    <!-- SCRIPTS                                    -->
+    <!-- ============================================ -->
 
     <!-- Prism.js for Syntax Highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -343,6 +338,6 @@ def calculate_average(numbers):
     <!-- ============================================ -->
     <!-- JAVASCRIPT                                 -->
     <!-- ============================================ -->
-    <script src="./js/script.js?v=1.0"></script>
+    <script src="./js/script.js?v=1.1"></script>
 </body>
 </html>
