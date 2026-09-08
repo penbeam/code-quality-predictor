@@ -388,14 +388,13 @@ body {
     color: var(--gray-400);
 }
 
-/* ===== CODE EDITOR BODY - THE FIX ===== */
 .code-editor-body {
     background: #1e1e2e;
     min-height: 200px;
     position: relative;
 }
 
-/* ===== CODE DISPLAY - THE FIX ===== */
+/* ===== CODE DISPLAY ===== */
 #codeDisplay {
     font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 14px;
@@ -646,7 +645,7 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
 
 .result-card-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
 }
@@ -659,6 +658,7 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     justify-content: center;
     border-radius: var(--border-radius-sm);
     font-size: 18px;
+    flex-shrink: 0;
 }
 
 .quality-icon {
@@ -685,6 +685,9 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     font-size: 14px;
     font-weight: 600;
     color: var(--gray-700);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .result-sub {
@@ -759,6 +762,252 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     background: rgba(239, 68, 68, 0.1);
     color: var(--danger);
 }
+
+/* ============================================
+   TOOLTIPS - NEW FEATURE
+   ============================================ */
+
+.tooltip-trigger {
+    display: inline-flex;
+    align-items: center;
+    cursor: help;
+    color: var(--gray-400);
+    font-size: 13px;
+    transition: var(--transition);
+    margin-left: 4px;
+}
+
+.tooltip-trigger:hover {
+    color: var(--primary);
+}
+
+.custom-tooltip {
+    position: fixed;
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 10px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 13px;
+    max-width: 300px;
+    line-height: 1.5;
+    box-shadow: var(--shadow-lg);
+    z-index: 9999;
+    pointer-events: none;
+    animation: tooltipFadeIn 0.2s ease;
+}
+
+.custom-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--gray-900);
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+body.dark-mode .custom-tooltip {
+    background: var(--gray-800);
+    color: var(--gray-100);
+}
+
+body.dark-mode .custom-tooltip::before {
+    border-bottom-color: var(--gray-800);
+}
+
+/* ============================================
+   ACTION SECTION - NEW FEATURE
+   ============================================ */
+
+.action-section {
+    grid-column: 1 / -1;
+    display: none;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    padding: 16px 0 4px;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 8px;
+}
+
+.action-section .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.btn-share {
+    background: var(--primary-gradient);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.btn-share:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.btn-pdf {
+    background: var(--danger);
+    color: var(--white);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.btn-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.45);
+}
+
+body.dark-mode .action-section {
+    border-top-color: var(--gray-700);
+}
+
+/* ============================================
+   SHARE MODAL - NEW FEATURE
+   ============================================ */
+
+.share-modal-content {
+    max-width: 500px;
+}
+
+.share-results-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: var(--border-radius-sm);
+}
+
+.share-result-item {
+    text-align: center;
+}
+
+.share-result-item .label {
+    font-size: 11px;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.share-result-item .value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.share-result-item .value.good { color: var(--success); }
+.share-result-item .value.medium { color: var(--warning); }
+.share-result-item .value.poor { color: var(--danger); }
+
+.share-qr-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 16px 0;
+}
+
+#qrcode {
+    background: var(--white);
+    padding: 16px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--gray-200);
+}
+
+#qrcode img {
+    display: block;
+}
+
+.share-qr-label {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 8px;
+}
+
+.share-link-container {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+#shareLinkInput {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius-sm);
+    font-size: 13px;
+    font-family: monospace;
+    background: var(--gray-50);
+    color: var(--gray-700);
+    outline: none;
+}
+
+#shareLinkInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Dark Mode - Share Modal */
+body.dark-mode .share-results-summary {
+    background: var(--gray-700);
+}
+
+body.dark-mode .share-result-item .value {
+    color: var(--white);
+}
+
+body.dark-mode #shareLinkInput {
+    background: var(--gray-700);
+    border-color: var(--gray-600);
+    color: var(--gray-200);
+}
+
+body.dark-mode #qrcode {
+    background: var(--gray-800);
+    border-color: var(--gray-600);
+}
+
+/* Responsive - Share Modal */
+@media (max-width: 480px) {
+    .share-results-summary {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .share-result-item .value {
+        font-size: 18px;
+    }
+    
+    .share-link-container {
+        flex-direction: column;
+    }
+    
+    .action-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .action-section .btn {
+        justify-content: center;
+    }
+}
+
+/* ============================================
+   METRICS CARD
+   ============================================ */
 
 .metrics-card {
     grid-column: 1 / -1;
@@ -909,6 +1158,10 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     gap: 8px;
     justify-content: flex-end;
 }
+
+/* ============================================
+   HISTORY
+   ============================================ */
 
 .history-list {
     display: flex;
@@ -1071,6 +1324,13 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     .modal-content { max-width: 95%; max-height: 90vh; }
     .toast { min-width: unset; max-width: 90vw; }
     #codeDisplay { font-size: 13px; padding: 12px !important; min-height: 150px; }
+    
+    .action-section .btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1084,6 +1344,16 @@ body:not(.dark-mode) #codeDisplay .token.def { color: #6f42c1 !important; }
     .input-actions { flex-direction: column; }
     .btn { justify-content: center; padding: 12px 20px; }
     .metrics-grid { grid-template-columns: 1fr 1fr; }
+    
+    .action-section {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .action-section .btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* ============================================
@@ -1166,5 +1436,15 @@ body.dark-mode .btn-secondary {
 
 body.dark-mode .btn-secondary:hover {
     background: var(--gray-600);
+    color: var(--white);
+}
+
+body.dark-mode .btn-share {
+    background: var(--primary-gradient);
+    color: var(--white);
+}
+
+body.dark-mode .btn-pdf {
+    background: var(--danger);
     color: var(--white);
 }
