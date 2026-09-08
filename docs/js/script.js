@@ -1,5 +1,5 @@
 // ============================================
-// SCRIPT.JS - Complete Frontend Logic
+// SCRIPT.JS - Complete Frontend Logic with Syntax Highlighting
 // ============================================
 
 // ============================================
@@ -14,11 +14,12 @@ const CONFIG = {
 };
 
 // ============================================
-// DOM REFERENCES
+// DOM REFERENCES - Updated for contenteditable
 // ============================================
 
 const DOM = {
-    codeInput: document.getElementById('codeInput'),
+    // Code editor elements
+    codeDisplay: document.getElementById('codeDisplay'),
     analyzeBtn: document.getElementById('analyzeBtn'),
     clearBtn: document.getElementById('clearBtn'),
     exampleBtn: document.getElementById('exampleBtn'),
@@ -76,6 +77,155 @@ const state = {
 };
 
 // ============================================
+// SYNTAX HIGHLIGHTING HELPERS
+// ============================================
+
+/**
+ * Highlight the code in the display element using Prism.js
+ */
+function highlightCode() {
+    if (typeof Prism !== 'undefined' && DOM.codeDisplay) {
+        Prism.highlightElement(DOM.codeDisplay);
+    }
+}
+
+/**
+ * Get the current code from the contenteditable element
+ */
+function getCode() {
+    if (!DOM.codeDisplay) return '';
+    return DOM.codeDisplay.textContent || '';
+}
+
+/**
+ * Set code in the contenteditable element and highlight it
+ */
+function setCode(code) {
+    if (!DOM.codeDisplay) return;
+    DOM.codeDisplay.textContent = code || '';
+    highlightCode();
+    updateLineCount();
+}
+
+/**
+ * Clear the code editor
+ */
+function clearCode() {
+    if (!DOM.codeDisplay) return;
+    DOM.codeDisplay.textContent = '';
+    highlightCode();
+    updateLineCount();
+    DOM.codeDisplay.focus();
+}
+
+/**
+ * Update the line count display
+ */
+function updateLineCount() {
+    if (!DOM.codeDisplay || !DOM.lineCount) return;
+    const lines = DOM.codeDisplay.textContent.split('\n').length;
+    DOM.lineCount.textContent = `${lines} lines`;
+}
+
+// ============================================
+// CODE EDITOR EVENT HANDLERS
+// ============================================
+
+/**
+ * Handle input events on the contenteditable code editor
+ */
+function handleCodeInput(e) {
+    // Save cursor position
+    const selection = window.getSelection();
+    if (!selection.rangeCount) {
+        updateLineCount();
+        return;
+    }
+    
+    const range = selection.getRangeAt(0);
+    const textNode = DOM.codeDisplay.firstChild;
+    let startOffset = 0;
+    
+    if (textNode) {
+        startOffset = range.startOffset;
+    }
+    
+    // Update line count
+    updateLineCount();
+    
+    // Re-apply highlighting
+    highlightCode();
+    
+    // Restore cursor position
+    try {
+        if (textNode) {
+            const newRange = document.createRange();
+            const safeOffset = Math.min(startOffset, textNode.length);
+            newRange.setStart(textNode, safeOffset);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+        }
+    } catch (e) {
+        // If cursor restoration fails, put cursor at the end
+        try {
+            const range = document.createRange();
+            range.selectNodeContents(DOM.codeDisplay);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        } catch (err) {
+            // Fallback: do nothing
+        }
+    }
+}
+
+/**
+ * Handle Tab key for code indentation
+ */
+function handleCodeKeydown(e) {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        
+        const range = selection.getRangeAt(0);
+        const textNode = DOM.codeDisplay.firstChild;
+        
+        if (!textNode) return;
+        
+        const start = range.startOffset;
+        const end = range.endOffset;
+        const text = textNode.textContent || '';
+        
+        // Insert 4 spaces
+        const newText = text.substring(0, start) + '    ' + text.substring(end);
+        textNode.textContent = newText;
+        
+        // Move cursor after the inserted spaces
+        try {
+            const newRange = document.createRange();
+            const newPosition = Math.min(start + 4, textNode.length);
+            newRange.setStart(textNode, newPosition);
+            newRange.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+        } catch (err) {
+            // Fallback: select all content
+            const newRange = document.createRange();
+            newRange.selectNodeContents(DOM.codeDisplay);
+            newRange.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+        }
+        
+        highlightCode();
+        updateLineCount();
+    }
+}
+
+// ============================================
 // THEME TOGGLE
 // ============================================
 
@@ -84,6 +234,8 @@ function initTheme() {
         document.body.classList.add('dark-mode');
         DOM.themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
+    // Re-apply highlighting after theme change
+    setTimeout(highlightCode, 100);
 }
 
 function toggleTheme() {
@@ -93,6 +245,8 @@ function toggleTheme() {
     DOM.themeToggle.innerHTML = state.darkMode 
         ? '<i class="fas fa-sun"></i>' 
         : '<i class="fas fa-moon"></i>';
+    // Re-apply highlighting after theme change
+    setTimeout(highlightCode, 100);
 }
 
 // ============================================
@@ -131,30 +285,6 @@ function showToast(message, type = 'info', title = '') {
         toast.classList.add('toast-out');
         setTimeout(() => toast.remove(), 300);
     });
-}
-
-// ============================================
-// CODE EDITOR HELPERS
-// ============================================
-
-function updateLineCount() {
-    const lines = DOM.codeInput.value.split('\n').length;
-    DOM.lineCount.textContent = `${lines} lines`;
-}
-
-function getCode() {
-    return DOM.codeInput.value.trim();
-}
-
-function setCode(code) {
-    DOM.codeInput.value = code;
-    updateLineCount();
-}
-
-function clearCode() {
-    DOM.codeInput.value = '';
-    updateLineCount();
-    DOM.codeInput.focus();
 }
 
 // ============================================
@@ -211,9 +341,9 @@ function loadExample() {
 async function analyzeCode() {
     const code = getCode();
     
-    if (!code) {
+    if (!code || code.trim() === '') {
         showToast('Please paste some code to analyze.', 'warning', 'Empty Input');
-        DOM.codeInput.focus();
+        DOM.codeDisplay.focus();
         return;
     }
     
@@ -391,8 +521,15 @@ document.addEventListener('keydown', (e) => {
 // EVENT LISTENERS
 // ============================================
 
-// Code input
-DOM.codeInput.addEventListener('input', updateLineCount);
+// Code editor events
+if (DOM.codeDisplay) {
+    DOM.codeDisplay.addEventListener('input', handleCodeInput);
+    DOM.codeDisplay.addEventListener('keydown', handleCodeKeydown);
+    // Also update line count on paste
+    DOM.codeDisplay.addEventListener('paste', () => {
+        setTimeout(updateLineCount, 10);
+    });
+}
 
 // Buttons
 DOM.analyzeBtn.addEventListener('click', analyzeCode);
@@ -419,6 +556,9 @@ function init() {
     initTheme();
     updateLineCount();
     
+    // Apply initial highlighting
+    setTimeout(highlightCode, 100);
+    
     // Load example on first visit
     if (!localStorage.getItem('codeHistory')) {
         setTimeout(loadExample, 500);
@@ -427,6 +567,7 @@ function init() {
     console.log('🚀 Code Quality Predictor initialized!');
     console.log(`📡 API URL: ${CONFIG.API_URL}`);
     console.log('💡 Press Ctrl+Enter to analyze code');
+    console.log('💡 Press Tab for indentation');
 }
 
 // Start the app
@@ -444,4 +585,7 @@ window.__app = {
     toggleTheme,
     openHistory,
     closeHistory,
+    getCode,
+    setCode,
+    highlightCode,
 };
