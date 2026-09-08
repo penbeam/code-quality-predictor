@@ -1,0 +1,8 @@
+# Disable Jekyll
+theme: null
+markdown: none
+include:
+  - .nojekyll
+  - index.html
+  - css/
+  - js/
