@@ -8,7 +8,7 @@
 
 const CONFIG = {
     // Change this to your Render URL when deployed
-    API_URL: 'http://localhost:8000',
+    API_URL: 'https://code-quality-api.onrender.com',
     TOAST_DURATION: 4000,
     MAX_HISTORY: 20,
 };
